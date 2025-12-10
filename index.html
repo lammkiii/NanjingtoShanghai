@@ -262,20 +262,19 @@
 
     <script>
         // ==========================================
-        // ⚠️ 你的 Firebase 設定已自動植入
+        // ⚠️ 這裡已經更新為你剛給的最新設定 ⚠️
         // ==========================================
         const firebaseConfig = {
-          apiKey: "AIzaSyADDG6dYZVGjjrRSBDsodPMAISqka96lko",
-          authDomain: "nanjingtoshanghai.firebaseapp.com",
-          projectId: "nanjingtoshanghai",
-          storageBucket: "nanjingtoshanghai.firebasestorage.app",
-          messagingSenderId: "75097039020",
-          appId: "1:75097039020:web:9d55460b59e9d6f1963f09",
-          measurementId: "G-ELQ5HX7NFR"
+          apiKey: "AIzaSyB_hMv4NcqwG0GmwOeDKwyEerKGgt4Ow3k",
+          authDomain: "nanjingtoshanghai-d378c.firebaseapp.com",
+          projectId: "nanjingtoshanghai-d378c",
+          storageBucket: "nanjingtoshanghai-d378c.firebasestorage.app",
+          messagingSenderId: "143115276",
+          appId: "1:143115276:web:097ffe5c1406ae20a8da29"
         };
         // ==========================================
 
-        // 初始化 Firebase (使用 Compat 語法)
+        // 初始化 Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -306,9 +305,8 @@
                 renderItinerary(currentDay);
             }, (error) => {
                 console.error("讀取失敗:", error);
-                // 錯誤提示：通常是因為沒有開 Test Mode
                 if(error.code === 'permission-denied') {
-                    alert("⚠️ 權限錯誤：請到 Firebase Console -> Firestore Database -> Rules，確保規則已設為 allow read, write: if true;");
+                    alert("⚠️ 權限錯誤：資料庫還沒建立，或權限沒開！請回 Firebase Console -> Build -> Firestore Database 建立資料庫。");
                 }
             });
         }
@@ -335,7 +333,7 @@
                 type: type,
                 title: title,
                 desc: desc,
-                location: location || title, // 若沒填地點則用標題
+                location: location || title, 
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 closeModal();
@@ -347,7 +345,7 @@
                 document.getElementById('input-location').value = '';
             }).catch((error) => {
                 console.error("寫入錯誤", error);
-                alert("新增失敗：" + error.message);
+                alert("新增失敗，請檢查資料庫是否存在：" + error.message);
                 btn.disabled = false;
             });
         }
@@ -357,7 +355,6 @@
             const list = document.getElementById('itinerary-list');
             list.innerHTML = '';
 
-            // 過濾出當天的行程
             const dayItems = allItineraries.filter(item => parseInt(item.day) === dayId);
 
             if (dayItems.length === 0) {
@@ -374,7 +371,6 @@
                 card.className = `card ${item.type}`;
                 const amapUrl = `https://uri.amap.com/navigation?poiname=${encodeURIComponent(item.location)}`;
 
-                // 簡單判斷關鍵字來加標籤
                 let tagHtml = '';
                 if(item.desc && item.desc.includes("必吃")) tagHtml += `<span class="tag tag-must-eat">必吃</span>`;
                 if(item.desc && item.desc.includes("預約")) tagHtml += `<span class="tag tag-code">需預約</span>`;
@@ -395,7 +391,6 @@
             });
         }
 
-        // 簡易刪除功能 (為了測試方便)
         function deleteItem(docId) {
             if(confirm("確定要刪除這個行程嗎？")) {
                 db.collection("trips").doc(docId).delete().catch(error => {
@@ -422,7 +417,6 @@
             }
         }
         
-        // 簡單天氣模擬
         function updateWeather(city) {
             if(city === '上海') {
                 document.getElementById('weather-temp').textContent = '21°C';
@@ -433,7 +427,6 @@
             }
         }
 
-        // Modal 控制
         function openModal() { document.getElementById('addModal').classList.add('open'); }
         function closeModal() { document.getElementById('addModal').classList.remove('open'); }
         function switchTab(t) {
@@ -441,7 +434,6 @@
             document.getElementById('tab-'+t).classList.add('active');
             
             document.querySelectorAll('.tab-item').forEach(e => e.classList.remove('active'));
-            // 簡單判斷 Icon 亮起 (這只是視覺效果)
             if(t==='itinerary') document.querySelectorAll('.tab-item')[0].classList.add('active');
             if(t==='tools') document.querySelectorAll('.tab-item')[1].classList.add('active');
         }
