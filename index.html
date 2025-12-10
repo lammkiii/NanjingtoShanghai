@@ -43,7 +43,7 @@
         .location-badge {
             background: var(--accent-blue); padding: 5px 12px;
             border-radius: 20px; font-size: 0.8rem; font-weight: bold;
-            cursor: pointer; /* 讓使用者知道可以點擊切換 */
+            cursor: pointer;
         }
 
         .container { padding: 15px; }
@@ -169,9 +169,13 @@
         }
         .tool-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
         
-        .flight-detail { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-        .flight-detail:last-child { border: none; }
-        .flight-route { font-weight: bold; font-size: 1.1rem; color: #4A90E2; margin-bottom: 5px; }
+        /* Info Detail Styles (共用) */
+        .info-detail { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        .info-detail:last-child { border: none; }
+        .info-title { font-weight: bold; font-size: 1.1rem; color: #4A90E2; margin-bottom: 5px; }
+        .info-sub { font-size: 0.9rem; color: var(--text-light); margin-bottom: 3px; }
+        .info-content { font-size: 1.1rem; font-weight: bold; margin: 5px 0; }
+        .info-address { font-size: 0.9rem; color: #555; background: #f9f9f9; padding: 8px; border-radius: 8px; margin-top: 5px; }
 
         /* Detail View */
         #detail-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; color: var(--text-main); }
@@ -221,7 +225,7 @@
                 <div class="tool-card" onclick="showFlightInfo()">
                     <span class="tool-icon">✈️</span><strong>航班資訊</strong>
                 </div>
-                <div class="tool-card">
+                <div class="tool-card" onclick="showHotelInfo()">
                     <span class="tool-icon">🏨</span><strong>住宿資訊</strong>
                 </div>
                 <div class="tool-card">
@@ -313,20 +317,47 @@
         <div class="modal-card" style="position:relative;">
             <div class="btn-close" onclick="closeModal('flightModal')">&times;</div>
             <h3 style="margin-top:0; margin-bottom: 20px;">✈️ 航班資訊</h3>
-            <div class="flight-detail">
-                <div class="flight-route">去程：澳門 ➔ 南京</div>
-                <div style="color:var(--text-light); font-size:0.9rem;">12月18日 (週一)</div>
-                <div style="font-size:1.2rem; font-weight:bold; margin:5px 0;">13:00 - 15:25</div>
+            <div class="info-detail">
+                <div class="info-title">去程：澳門 ➔ 南京</div>
+                <div class="info-sub">12月18日 (週一)</div>
+                <div class="info-content">13:00 - 15:25</div>
                 <div style="font-size:0.9rem;">東方航空 MU9798</div>
             </div>
-            <div class="flight-detail">
-                <div class="flight-route">回程：上海浦東 ➔ 澳門</div>
-                <div style="color:var(--text-light); font-size:0.9rem;">12月23日 (週六)</div>
-                <div style="font-size:1.2rem; font-weight:bold; margin:5px 0;">17:25 - 20:20</div>
+            <div class="info-detail">
+                <div class="info-title">回程：上海浦東 ➔ 澳門</div>
+                <div class="info-sub">12月23日 (週六)</div>
+                <div class="info-content">17:25 - 20:20</div>
                 <div style="font-size:0.9rem;">東方航空 MU9991</div>
             </div>
             <div style="background:#FFF3E0; padding:10px; border-radius:10px; font-size:0.9rem; color:#E65100; margin-top:10px;">
                 <i class="fas fa-exclamation-circle"></i> 記得提早 2 小時抵達機場 Check-in！
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="hotelModal">
+        <div class="modal-card" style="position:relative;">
+            <div class="btn-close" onclick="closeModal('hotelModal')">&times;</div>
+            <h3 style="margin-top:0; margin-bottom: 20px;">🏨 住宿資訊</h3>
+            
+            <div class="info-detail">
+                <div class="info-title">南京：里白酒店</div>
+                <div class="info-sub">玄武湖新模范馬路地鐵站店</div>
+                <div class="info-content">12月18日 - 12月20日 (2晚)</div>
+                <div style="font-size:0.9rem; margin-bottom:5px;">影音雙床房 x2</div>
+                <div class="info-address">
+                    <i class="fas fa-map-marker-alt"></i> 鼓樓區中央路323號利奧大廈F4層
+                </div>
+            </div>
+
+            <div class="info-detail">
+                <div class="info-title">上海：建國璞隱酒店</div>
+                <div class="info-sub">陸家嘴軟件園東方路店</div>
+                <div class="info-content">12月20日 - 12月23日 (3晚)</div>
+                <div style="font-size:0.9rem; margin-bottom:5px;">Check-in: 14:00後</div>
+                <div class="info-address">
+                    <i class="fas fa-map-marker-alt"></i> 上海浦東新區東方路1277號
+                </div>
             </div>
         </div>
     </div>
@@ -357,7 +388,7 @@
         // 預設每天對應的城市
         const cityMap = { 1:"南京", 2:"南京", 3:"南京", 4:"上海", 5:"上海", 6:"上海" };
         
-        // 2. Open-Meteo 城市座標設定 (包含澳門、南京、上海)
+        // 2. Open-Meteo 城市座標設定
         const cityCoords = {
             '南京': { lat: 32.0617, lon: 118.7632 },
             '上海': { lat: 31.2304, lon: 121.4737 },
@@ -408,7 +439,6 @@
             document.getElementById('weather-temp').textContent = '--°C';
             document.getElementById('weather-desc').textContent = '更新中...';
 
-            // 使用 Open-Meteo API (免費/免Key)
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current_weather=true&timezone=auto`;
 
             fetch(url)
@@ -625,7 +655,10 @@
         
         function openModal(id) { document.getElementById(id).classList.add('open'); }
         function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+        
+        // 專門顯示 Modal 的函式
         function showFlightInfo() { openModal('flightModal'); }
+        function showHotelInfo() { openModal('hotelModal'); }
 
         function switchTab(t) {
             document.querySelectorAll('.section').forEach(e => e.classList.remove('active'));
