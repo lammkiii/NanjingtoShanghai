@@ -70,7 +70,7 @@
             background: var(--text-main); color: white; border-color: var(--text-main);
         }
 
-        /* Timeline Styles (新的時間軸樣式) */
+        /* Timeline Styles */
         .timeline {
             position: relative;
             padding-left: 20px;
@@ -84,31 +84,35 @@
             position: relative; margin-bottom: 20px;
         }
         
-        /* 圓點 */
         .timeline-dot {
             position: absolute; left: -20px; top: 18px;
             width: 14px; height: 14px; border-radius: 50%;
             background: white; border: 3px solid var(--nav-active);
             z-index: 1;
         }
-        .timeline-dot.fixed-flight { border-color: #4A90E2; } /* 航班的點是藍色的 */
+        .timeline-dot.fixed-flight { border-color: #4A90E2; }
 
-        /* Card 樣式微調 */
+        /* Card 樣式 */
         .card {
             background: var(--card-bg); border-radius: 20px; padding: 18px;
             box-shadow: var(--shadow); position: relative;
-            margin-left: 10px; /* 留給時間軸 */
+            margin-left: 10px; 
+            transition: transform 0.1s;
+            cursor: pointer; /* 讓使用者知道可以點擊 */
         }
+        .card:active { transform: scale(0.98); }
         .card.spot { border-left: 5px solid var(--accent-blue); }
         .card.food { border-left: 5px solid var(--accent-pink); }
         .card.transport { border-left: 5px solid var(--accent-yellow); }
-        /* 固定行程(航班)樣式 */
         .card.fixed-item { border-left: 5px solid #4A90E2; background: #F0F7FF; }
 
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
         .time { font-weight: 700; color: var(--nav-active); font-size: 0.9rem; }
         .title { font-size: 1.1rem; font-weight: 700; margin: 5px 0; }
-        .desc { font-size: 0.9rem; color: var(--text-light); line-height: 1.5; margin-bottom: 10px; }
+        .desc { 
+            font-size: 0.9rem; color: var(--text-light); line-height: 1.5; margin-bottom: 10px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; /* 限制顯示兩行 */
+        }
         
         .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
         .tag { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; font-weight: 600; }
@@ -121,6 +125,10 @@
             padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; text-decoration: none; margin-top: 10px;
         }
 
+        /* 按鈕群組 */
+        .card-actions { display: flex; gap: 15px; }
+        .card-actions i { font-size: 0.9rem; padding: 5px; }
+
         /* Tab Bar */
         .tab-bar {
             position: fixed; bottom: 20px; left: 20px; right: 20px;
@@ -130,7 +138,7 @@
         .tab-item { color: var(--text-light); font-size: 1.2rem; padding: 10px; }
         .tab-item.active { color: var(--nav-active); transform: translateY(-2px); }
 
-        /* Modal */
+        /* Modal 通用 */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 999; justify-content: center; align-items: center;
@@ -167,12 +175,20 @@
         }
         .tool-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
         
-        /* Flight Detail in Tool */
+        /* Flight Detail */
         .flight-detail {
             border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px;
         }
         .flight-detail:last-child { border: none; }
         .flight-route { font-weight: bold; font-size: 1.1rem; color: #4A90E2; margin-bottom: 5px; }
+
+        /* Detail View Styles */
+        #detail-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; color: var(--text-main); }
+        #detail-time-tag { 
+            display: inline-block; background: var(--nav-active); color: white; 
+            padding: 4px 10px; border-radius: 10px; font-weight: bold; margin-bottom: 15px;
+        }
+        #detail-desc { font-size: 1rem; line-height: 1.8; color: #555; white-space: pre-wrap; }
     </style>
 </head>
 <body>
@@ -240,14 +256,16 @@
     <div class="tab-bar">
         <div class="tab-item active" onclick="switchTab('itinerary')"><i class="fas fa-map-marked-alt"></i></div>
         <div class="tab-item" onclick="switchTab('tools')"><i class="fas fa-suitcase"></i></div>
-        <div class="tab-item" onclick="openModal('addModal')"><i class="fas fa-plus-circle" style="color:var(--nav-active); font-size:1.4rem;"></i></div> 
+        <div class="tab-item" onclick="openAddModal()"><i class="fas fa-plus-circle" style="color:var(--nav-active); font-size:1.4rem;"></i></div> 
     </div>
 
-    <div class="modal-overlay" id="addModal">
+    <div class="modal-overlay" id="formModal">
         <div class="modal-card" style="position:relative;">
-            <div class="btn-close" onclick="closeModal('addModal')">&times;</div>
-            <h3 style="margin-top:0;">✨ 新增行程</h3>
+            <div class="btn-close" onclick="closeModal('formModal')">&times;</div>
+            <h3 style="margin-top:0;" id="form-title">✨ 新增行程</h3>
             
+            <input type="hidden" id="input-id">
+
             <div class="form-group">
                 <label class="form-label">第幾天</label>
                 <select id="input-day" class="form-select">
@@ -277,13 +295,31 @@
             </div>
             <div class="form-group">
                 <label class="form-label">描述 / 攻略</label>
-                <input type="text" id="input-desc" class="form-input" placeholder="必點烤鴨包...">
+                <textarea id="input-desc" class="form-input" rows="3" placeholder="必點烤鴨包..."></textarea>
             </div>
             <div class="form-group">
                 <label class="form-label">導航地點</label>
-                <input type="text" id="input-location" class="form-input" placeholder="用於高德地圖搜尋 (空白則用標題)">
+                <input type="text" id="input-location" class="form-input" placeholder="用於高德地圖搜尋">
             </div>
-            <button class="btn-submit" onclick="addItinerary()">確認新增</button>
+            <button class="btn-submit" id="btn-save" onclick="saveData()">確認新增</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-card" style="position:relative;">
+            <div class="btn-close" onclick="closeModal('detailModal')">&times;</div>
+            
+            <div id="detail-time-tag">12:00</div>
+            <div id="detail-title">標題</div>
+            <div style="margin-bottom: 20px; border-bottom:1px solid #eee;"></div>
+            
+            <div id="detail-desc">描述內容...</div>
+            
+            <div style="margin-top:20px;">
+                <a id="detail-nav-btn" href="#" target="_blank" class="btn-submit" style="display:block; text-align:center; text-decoration:none;">
+                    <i class="fas fa-location-arrow"></i> 開啟導航
+                </a>
+            </div>
         </div>
     </div>
 
@@ -314,7 +350,7 @@
 
     <script>
         // ==========================================
-        // Firebase Config (使用你提供的 Travel-app-2025)
+        // Firebase Config (travel-app-2025)
         // ==========================================
         const firebaseConfig = {
           apiKey: "AIzaSyCTobOEiUOsMyC39HN5WPgN6hD4p4gXxLU",
@@ -338,18 +374,16 @@
         let currentDay = 1;
         let allItineraries = []; 
 
-        // ✈️ 寫死在程式碼裡的航班資訊 (無法刪除)
-        // 這樣可以保證這些資訊永遠存在，不依賴資料庫
         const fixedFlights = [
             {
                 id: "flight_go",
                 day: 1,
                 time: "13:00",
-                type: "fixed-item", // 特殊樣式
+                type: "fixed-item",
                 title: "✈️ 飛往南京 (MU9798)",
                 desc: "澳門(MFM) ➔ 南京(NKG) | 13:00 起飛 - 15:25 抵達",
                 location: "澳門國際機場",
-                isFixed: true // 標記為不可刪除
+                isFixed: true
             },
             {
                 id: "flight_back",
@@ -383,7 +417,9 @@
             });
         }
 
-        function addItinerary() {
+        // === 新增或更新資料 ===
+        function saveData() {
+            const id = document.getElementById('input-id').value; // 取得隱藏的 ID
             const day = parseInt(document.getElementById('input-day').value);
             const time = document.getElementById('input-time').value;
             const type = document.getElementById('input-type').value;
@@ -393,23 +429,30 @@
 
             if(!title) return alert("請輸入標題！");
 
-            const btn = document.querySelector('.btn-submit');
-            btn.textContent = "傳送中...";
+            const btn = document.getElementById('btn-save');
+            btn.textContent = "處理中...";
             btn.disabled = true;
 
-            db.collection("trips").add({
+            const data = {
                 day: day, time: time, type: type, title: title, desc: desc,
-                location: location || title, 
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                closeModal('addModal');
-                btn.textContent = "確認新增";
+                location: location || title
+            };
+
+            let promise;
+            if (id) {
+                // 如果有 ID，代表是「編輯」
+                promise = db.collection("trips").doc(id).update(data);
+            } else {
+                // 如果沒有 ID，代表是「新增」
+                data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                promise = db.collection("trips").add(data);
+            }
+
+            promise.then(() => {
+                closeModal('formModal');
                 btn.disabled = false;
-                document.getElementById('input-title').value = '';
-                document.getElementById('input-desc').value = '';
-                document.getElementById('input-location').value = '';
             }).catch((error) => {
-                alert("新增失敗：" + error.message);
+                alert("儲存失敗：" + error.message);
                 btn.disabled = false;
             });
         }
@@ -418,14 +461,9 @@
             const list = document.getElementById('itinerary-list');
             list.innerHTML = '';
 
-            // 1. 取得資料庫中的當日行程
             let dayItems = allItineraries.filter(item => parseInt(item.day) === dayId);
-            
-            // 2. 加入當日的固定航班 (如果有)
             const daysFixedFlights = fixedFlights.filter(f => f.day === dayId);
             dayItems = [...dayItems, ...daysFixedFlights];
-
-            // 3. 重新依照時間排序
             dayItems.sort((a, b) => a.time.localeCompare(b.time));
 
             if (dayItems.length === 0) {
@@ -441,38 +479,94 @@
                 const timelineItem = document.createElement('div');
                 timelineItem.className = 'timeline-item';
 
-                const amapUrl = `https://uri.amap.com/navigation?poiname=${encodeURIComponent(item.location)}`;
                 let tagHtml = '';
-                
-                // 標籤邏輯
                 if(item.isFixed) tagHtml += `<span class="tag tag-flight">航班</span>`;
                 else {
                     if(item.desc && item.desc.includes("必吃")) tagHtml += `<span class="tag tag-must-eat">必吃</span>`;
                     if(item.desc && item.desc.includes("預約")) tagHtml += `<span class="tag tag-code">需預約</span>`;
                 }
 
-                // 刪除按鈕邏輯：如果是固定行程 (isFixed)，就不顯示刪除鈕
-                const deleteBtn = item.isFixed 
-                    ? `<i class="fas fa-lock" style="color:#ccc; font-size:0.8rem;" title="固定行程無法刪除"></i>`
-                    : `<i class="fas fa-trash-alt" style="color:#ffb7b7; cursor:pointer;" onclick="deleteItem('${item.id}')" title="刪除"></i>`;
+                // 按鈕群組 (固定行程不顯示)
+                let actionBtns = '';
+                if (!item.isFixed) {
+                    // 注意：這裡加了 event.stopPropagation() 防止點按鈕時觸發查看詳情
+                    actionBtns = `
+                        <div class="card-actions">
+                            <i class="fas fa-pen" style="color:#aaa; cursor:pointer;" onclick="openEditModal('${item.id}'); event.stopPropagation();"></i>
+                            <i class="fas fa-trash-alt" style="color:#ffb7b7; cursor:pointer;" onclick="deleteItem('${item.id}'); event.stopPropagation();"></i>
+                        </div>
+                    `;
+                } else {
+                    actionBtns = `<i class="fas fa-lock" style="color:#eee;"></i>`;
+                }
+
+                // 將物件轉為 JSON 字串，方便傳遞給 viewDetail (處理單引號問題)
+                const itemStr = encodeURIComponent(JSON.stringify(item));
 
                 timelineItem.innerHTML = `
                     <div class="timeline-dot ${item.isFixed ? 'fixed-flight' : ''}"></div>
-                    <div class="card ${item.type}">
+                    <div class="card ${item.type} ${item.isFixed ? 'fixed-item' : ''}" onclick="viewDetail('${itemStr}')">
                         <div class="card-header">
                             <span class="time">${item.time}</span>
-                            ${deleteBtn}
+                            ${actionBtns}
                         </div>
                         <div class="title">${item.title}</div>
                         <div class="desc">${item.desc}</div>
                         <div class="tags">${tagHtml}</div>
-                        <a href="${amapUrl}" target="_blank" class="nav-btn">
-                            <i class="fas fa-location-arrow"></i> 導航
-                        </a>
                     </div>
                 `;
                 list.appendChild(timelineItem);
             });
+        }
+
+        // === 點擊卡片查看詳情 ===
+        function viewDetail(itemStr) {
+            const item = JSON.parse(decodeURIComponent(itemStr));
+            
+            document.getElementById('detail-time-tag').textContent = item.time;
+            document.getElementById('detail-title').textContent = item.title;
+            // 處理換行顯示
+            document.getElementById('detail-desc').innerText = item.desc || "沒有描述";
+            
+            const amapUrl = `https://uri.amap.com/navigation?poiname=${encodeURIComponent(item.location)}`;
+            document.getElementById('detail-nav-btn').href = amapUrl;
+
+            openModal('detailModal');
+        }
+
+        // === 開啟新增模式 ===
+        function openAddModal() {
+            document.getElementById('form-title').textContent = "✨ 新增行程";
+            document.getElementById('btn-save').textContent = "確認新增";
+            document.getElementById('input-id').value = ""; // 清空 ID
+            // 清空欄位
+            document.getElementById('input-title').value = '';
+            document.getElementById('input-desc').value = '';
+            document.getElementById('input-location').value = '';
+            document.getElementById('input-time').value = '12:00';
+            
+            openModal('formModal');
+        }
+
+        // === 開啟編輯模式 ===
+        function openEditModal(id) {
+            // 從 allItineraries 找到該筆資料
+            const item = allItineraries.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('form-title').textContent = "✏️ 編輯行程";
+            document.getElementById('btn-save').textContent = "確認修改";
+            
+            // 填入舊資料
+            document.getElementById('input-id').value = item.id;
+            document.getElementById('input-day').value = item.day;
+            document.getElementById('input-time').value = item.time;
+            document.getElementById('input-type').value = item.type;
+            document.getElementById('input-title').value = item.title;
+            document.getElementById('input-desc').value = item.desc;
+            document.getElementById('input-location').value = item.location;
+
+            openModal('formModal');
         }
 
         function deleteItem(docId) {
@@ -511,10 +605,9 @@
             }
         }
 
-        // Modal 控制通用函式
         function openModal(id) { document.getElementById(id).classList.add('open'); }
         function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-        function showFlightInfo() { openModal('flightModal'); } // 專門給航班資訊用
+        function showFlightInfo() { openModal('flightModal'); }
 
         function switchTab(t) {
             document.querySelectorAll('.section').forEach(e => e.classList.remove('active'));
