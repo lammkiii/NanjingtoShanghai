@@ -88,7 +88,7 @@
             background: white; border: 3px solid var(--nav-active);
             z-index: 1;
         }
-        .timeline-dot.fixed-flight { border-color: #4A90E2; }
+        .timeline-dot.fixed-item { border-color: #4A90E2; } /* 航班/迪士尼用藍色點 */
 
         /* Card Styles */
         .card {
@@ -100,6 +100,8 @@
         .card.spot { border-left: 5px solid var(--accent-blue); }
         .card.food { border-left: 5px solid var(--accent-pink); }
         .card.transport { border-left: 5px solid var(--accent-yellow); }
+        
+        /* 固定行程樣式 (藍色系) */
         .card.fixed-item { border-left: 5px solid #4A90E2; background: #F0F7FF; }
 
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
@@ -114,7 +116,7 @@
         .tag { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; font-weight: 600; }
         .tag-must-eat { background: #FFE0E0; color: #D64545; }
         .tag-code { background: #FFF3E0; color: #EF6C00; font-family: monospace; }
-        .tag-flight { background: #E3F2FD; color: #1976D2; }
+        .tag-blue { background: #E3F2FD; color: #1976D2; } /* 航班/迪士尼標籤 */
 
         .nav-btn {
             display: inline-flex; align-items: center; background: #4A90E2; color: white;
@@ -169,7 +171,7 @@
         }
         .tool-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
         
-        /* Info Detail Styles (共用) */
+        /* Info Detail Styles */
         .info-detail { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
         .info-detail:last-child { border: none; }
         .info-title { font-weight: bold; font-size: 1.1rem; color: #4A90E2; margin-bottom: 5px; }
@@ -240,9 +242,9 @@
                 <h3>📝 備忘錄</h3>
                 <ul style="padding-left: 20px; color: var(--text-main); line-height: 1.8;">
                     <li><strong>身份證、回鄉證 (非常重要！)</strong></li>
+                    <li>迪士尼日必帶：身份證原件</li>
                     <li>轉接頭、行動電源</li>
                     <li>個人常備藥品</li>
-                    <li>吉伊卡哇玩偶</li>
                 </ul>
             </div>
         </div>
@@ -339,25 +341,19 @@
         <div class="modal-card" style="position:relative;">
             <div class="btn-close" onclick="closeModal('hotelModal')">&times;</div>
             <h3 style="margin-top:0; margin-bottom: 20px;">🏨 住宿資訊</h3>
-            
             <div class="info-detail">
                 <div class="info-title">南京：里白酒店</div>
                 <div class="info-sub">玄武湖新模范馬路地鐵站店</div>
                 <div class="info-content">12月18日 - 12月20日 (2晚)</div>
                 <div style="font-size:0.9rem; margin-bottom:5px;">影音雙床房 x2</div>
-                <div class="info-address">
-                    <i class="fas fa-map-marker-alt"></i> 鼓樓區中央路323號利奧大廈F4層
-                </div>
+                <div class="info-address"><i class="fas fa-map-marker-alt"></i> 鼓樓區中央路323號利奧大廈F4層</div>
             </div>
-
             <div class="info-detail">
                 <div class="info-title">上海：建國璞隱酒店</div>
                 <div class="info-sub">陸家嘴軟件園東方路店</div>
                 <div class="info-content">12月20日 - 12月23日 (3晚)</div>
                 <div style="font-size:0.9rem; margin-bottom:5px;">Check-in: 14:00後</div>
-                <div class="info-address">
-                    <i class="fas fa-map-marker-alt"></i> 上海浦東新區東方路1277號
-                </div>
+                <div class="info-address"><i class="fas fa-map-marker-alt"></i> 上海浦東新區東方路1277號</div>
             </div>
         </div>
     </div>
@@ -379,16 +375,14 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 1. 城市與行程對應設定
+        // 1. 城市與行程對應
         const dayLabels = {
             1: "Day 1: 抵達南京", 2: "Day 2: 歷史巡禮", 3: "Day 3: 文藝散策",
-            4: "Day 4: 移動日", 5: "Day 5: 繁花之旅", 6: "Day 6: 回程"
+            4: "Day 4: 移動日", 5: "Day 5: 迪士尼樂園", 6: "Day 6: 回程"
         };
-        
-        // 預設每天對應的城市
         const cityMap = { 1:"南京", 2:"南京", 3:"南京", 4:"上海", 5:"上海", 6:"上海" };
         
-        // 2. Open-Meteo 城市座標設定
+        // 2. 城市座標
         const cityCoords = {
             '南京': { lat: 32.0617, lon: 118.7632 },
             '上海': { lat: 31.2304, lon: 121.4737 },
@@ -398,29 +392,35 @@
         let currentDay = 1;
         let allItineraries = []; 
 
-        const fixedFlights = [
+        // 3. 固定行程清單 (包含航班 + 迪士尼)
+        const fixedItems = [
             {
                 id: "flight_go", day: 1, time: "13:00", type: "fixed-item",
                 title: "✈️ 飛往南京 (MU9798)",
                 desc: "澳門(MFM) ➔ 南京(NKG) | 13:00 起飛 - 15:25 抵達",
-                location: "澳門國際機場", isFixed: true
+                location: "澳門國際機場", isFixed: true, tag: "航班"
+            },
+            {
+                id: "disney_land", day: 5, time: "08:30", type: "fixed-item",
+                title: "🏰 上海迪士尼樂園 (全日)",
+                desc: "瘋狂動物城、花車巡遊、煙火秀\n⏰ 開放時間：08:30 - 21:30\n⚠️ 必須攜帶本人有效身份證原件入園！無需換票，憑證件直接刷卡入園。",
+                location: "上海迪士尼度假區", isFixed: true, tag: "主題樂園"
             },
             {
                 id: "flight_back", day: 6, time: "17:25", type: "fixed-item",
                 title: "✈️ 飛往澳門 (MU9991)",
                 desc: "上海浦東(PVG) ➔ 澳門(MFM) | 17:25 起飛 - 20:20 抵達",
-                location: "上海浦東國際機場T1", isFixed: true
+                location: "上海浦東國際機場T1", isFixed: true, tag: "航班"
             }
         ];
 
         window.onload = function() {
             renderDaySelector();
             listenRealtimeData();
-            // 初始化天氣 (預設南京)
             updateWeather("南京");
         };
 
-        // === 🌤️ 實時天氣功能 (Open-Meteo) ===
+        // === 🌤️ 實時天氣 ===
         function getWeatherDesc(code) {
             if (code === 0) return "晴朗 ☀️";
             if (code >= 1 && code <= 3) return "多雲 ☁️";
@@ -435,43 +435,30 @@
         function updateWeather(city) {
             const coords = cityCoords[city];
             if (!coords) return;
-
             document.getElementById('weather-temp').textContent = '--°C';
             document.getElementById('weather-desc').textContent = '更新中...';
-
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current_weather=true&timezone=auto`;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const temp = Math.round(data.current_weather.temperature);
-                    const code = data.current_weather.weathercode;
-                    const desc = getWeatherDesc(code);
-
-                    document.getElementById('weather-temp').textContent = `${temp}°C`;
-                    document.getElementById('weather-desc').textContent = `${desc} • ${city}`;
-                    
-                    // 根據天氣代碼改變卡片背景
-                    const bg = code <= 3 ? 'linear-gradient(135deg, #e0f2ff 0%, #ffffff 100%)' :
-                               code >= 51 ? 'linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%)' :
-                               'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)';
-                    document.querySelector('.weather-card').style.background = bg;
-                })
-                .catch(error => {
-                    console.error("天氣失敗:", error);
-                    document.getElementById('weather-temp').textContent = 'N/A';
-                    document.getElementById('weather-desc').textContent = '天氣服務暫停';
-                });
+            fetch(url).then(response => response.json()).then(data => {
+                const temp = Math.round(data.current_weather.temperature);
+                const code = data.current_weather.weathercode;
+                document.getElementById('weather-temp').textContent = `${temp}°C`;
+                document.getElementById('weather-desc').textContent = `${getWeatherDesc(code)} • ${city}`;
+                const bg = code <= 3 ? 'linear-gradient(135deg, #e0f2ff 0%, #ffffff 100%)' :
+                           code >= 51 ? 'linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%)' :
+                           'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)';
+                document.querySelector('.weather-card').style.background = bg;
+            }).catch(e => {
+                document.getElementById('weather-temp').textContent = 'N/A';
+                document.getElementById('weather-desc').textContent = '天氣服務暫停';
+            });
         }
         
-        // 手動點擊右上角標籤切換城市 (循環: 南京 -> 上海 -> 澳門)
         function cycleCity() {
             const current = document.getElementById('current-city').textContent;
             let next = "南京";
             if(current === "南京") next = "上海";
             else if(current === "上海") next = "澳門";
             else if(current === "澳門") next = "南京";
-            
             document.getElementById('current-city').textContent = next;
             updateWeather(next);
         }
@@ -485,9 +472,7 @@
                 });
                 renderItinerary(currentDay);
             }, (error) => {
-                if(error.code === 'permission-denied') {
-                    alert("⚠️ 權限錯誤：請確認資料庫已建立！");
-                }
+                if(error.code === 'permission-denied') alert("⚠️ 權限錯誤：請確認資料庫已建立！");
             });
         }
 
@@ -502,24 +487,17 @@
             const location = document.getElementById('input-location').value;
 
             if(!title) return alert("請輸入標題！");
-
             const btn = document.getElementById('btn-save');
             btn.textContent = "處理中...";
             btn.disabled = true;
-
-            const data = {
-                day: day, time: time, type: type, title: title, desc: desc,
-                location: location || title
-            };
+            const data = { day, time, type, title, desc, location: location || title };
 
             let promise;
-            if (id) {
-                promise = db.collection("trips").doc(id).update(data);
-            } else {
+            if (id) promise = db.collection("trips").doc(id).update(data);
+            else {
                 data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                 promise = db.collection("trips").add(data);
             }
-
             promise.then(() => {
                 closeModal('formModal');
                 btn.disabled = false;
@@ -535,8 +513,9 @@
             list.innerHTML = '';
 
             let dayItems = allItineraries.filter(item => parseInt(item.day) === dayId);
-            const daysFixedFlights = fixedFlights.filter(f => f.day === dayId);
-            dayItems = [...dayItems, ...daysFixedFlights];
+            // 加入固定行程 (航班、迪士尼)
+            const daysFixedItems = fixedItems.filter(f => f.day === dayId);
+            dayItems = [...dayItems, ...daysFixedItems];
             dayItems.sort((a, b) => a.time.localeCompare(b.time));
 
             if (dayItems.length === 0) {
@@ -553,8 +532,11 @@
                 timelineItem.className = 'timeline-item';
 
                 let tagHtml = '';
-                if(item.isFixed) tagHtml += `<span class="tag tag-flight">航班</span>`;
-                else {
+                // 標籤邏輯
+                if(item.isFixed) {
+                    const tagName = item.tag || "固定行程";
+                    tagHtml += `<span class="tag tag-blue">${tagName}</span>`;
+                } else {
                     if(item.desc && item.desc.includes("必吃")) tagHtml += `<span class="tag tag-must-eat">必吃</span>`;
                     if(item.desc && item.desc.includes("預約")) tagHtml += `<span class="tag tag-code">需預約</span>`;
                 }
@@ -568,13 +550,12 @@
                         </div>
                     `;
                 } else {
-                    actionBtns = `<i class="fas fa-lock" style="color:#eee;"></i>`;
+                    actionBtns = `<i class="fas fa-lock" style="color:#eee;" title="固定行程無法修改"></i>`;
                 }
 
                 const itemStr = encodeURIComponent(JSON.stringify(item));
-
                 timelineItem.innerHTML = `
-                    <div class="timeline-dot ${item.isFixed ? 'fixed-flight' : ''}"></div>
+                    <div class="timeline-dot ${item.isFixed ? 'fixed-item' : ''}"></div>
                     <div class="card ${item.type} ${item.isFixed ? 'fixed-item' : ''}" onclick="viewDetail('${itemStr}')">
                         <div class="card-header">
                             <span class="time">${item.time}</span>
@@ -641,11 +622,9 @@
                 chip.textContent = dayLabels[i].split(':')[0]; 
                 chip.onclick = () => {
                     currentDay = i;
-                    // 自動切換天氣
                     const city = cityMap[i];
                     document.getElementById('current-city').textContent = city;
                     updateWeather(city);
-                    
                     renderDaySelector();
                     renderItinerary(i);
                 };
@@ -655,8 +634,6 @@
         
         function openModal(id) { document.getElementById(id).classList.add('open'); }
         function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-        
-        // 專門顯示 Modal 的函式
         function showFlightInfo() { openModal('flightModal'); }
         function showHotelInfo() { openModal('hotelModal'); }
 
