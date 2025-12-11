@@ -42,8 +42,7 @@
         h1 { margin: 0; font-size: 1.2rem; font-weight: 700; }
         .location-badge {
             background: var(--accent-blue); padding: 5px 12px;
-            border-radius: 20px; font-size: 0.8rem; font-weight: bold;
-            cursor: pointer;
+            border-radius: 20px; font-size: 0.8rem; font-weight: bold; cursor: pointer;
         }
 
         .container { padding: 15px; }
@@ -53,138 +52,92 @@
             background: linear-gradient(135deg, #e0f2ff 0%, #ffffff 100%);
             border-radius: 20px; padding: 15px; margin-bottom: 20px;
             display: flex; align-items: center; justify-content: space-between;
-            box-shadow: var(--shadow);
-            transition: background 0.5s ease;
+            box-shadow: var(--shadow); transition: background 0.5s ease;
         }
         .weather-info h2 { margin: 0; font-size: 1.5rem; }
         .weather-info p { margin: 5px 0 0; font-size: 0.9rem; color: var(--text-light); }
         .weather-icon { font-size: 2rem; color: #7BC4EA; }
 
-        /* Day Scroll */
-        .day-scroll {
-            display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; margin-bottom: 10px;
-        }
-        .day-chip {
-            background: var(--card-bg); padding: 8px 16px; border-radius: 16px;
-            white-space: nowrap; border: 1px solid #eee; transition: all 0.3s;
-        }
-        .day-chip.active {
-            background: var(--text-main); color: white; border-color: var(--text-main);
-        }
-
-        /* Timeline Styles */
-        .timeline {
-            position: relative; padding-left: 20px;
-        }
+        /* Timeline & Cards */
+        .timeline { position: relative; padding-left: 20px; }
         .timeline::before {
             content: ''; position: absolute; left: 6px; top: 10px; bottom: 10px;
             width: 2px; background: var(--line-color);
         }
         .timeline-item { position: relative; margin-bottom: 20px; }
-        
         .timeline-dot {
             position: absolute; left: -20px; top: 18px;
             width: 14px; height: 14px; border-radius: 50%;
-            background: white; border: 3px solid var(--nav-active);
-            z-index: 1;
+            background: white; border: 3px solid var(--nav-active); z-index: 1;
         }
-        .timeline-dot.fixed-item { border-color: #4A90E2; } /* 航班/迪士尼用藍色點 */
+        .timeline-dot.fixed-item { border-color: #4A90E2; }
 
-        /* Card Styles */
         .card {
             background: var(--card-bg); border-radius: 20px; padding: 18px;
-            box-shadow: var(--shadow); position: relative;
-            margin-left: 10px; transition: transform 0.1s; cursor: pointer;
+            box-shadow: var(--shadow); position: relative; margin-left: 10px;
+            transition: transform 0.1s; cursor: pointer;
         }
         .card:active { transform: scale(0.98); }
         .card.spot { border-left: 5px solid var(--accent-blue); }
         .card.food { border-left: 5px solid var(--accent-pink); }
         .card.transport { border-left: 5px solid var(--accent-yellow); }
-        
-        /* 固定行程樣式 (藍色系) */
         .card.fixed-item { border-left: 5px solid #4A90E2; background: #F0F7FF; }
 
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
         .time { font-weight: 700; color: var(--nav-active); font-size: 0.9rem; }
         .title { font-size: 1.1rem; font-weight: 700; margin: 5px 0; }
-        .desc { 
-            font-size: 0.9rem; color: var(--text-light); line-height: 1.5; margin-bottom: 10px;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-        }
-        
+        .desc { font-size: 0.9rem; color: var(--text-light); line-height: 1.5; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
         .tag { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; font-weight: 600; }
         .tag-must-eat { background: #FFE0E0; color: #D64545; }
         .tag-code { background: #FFF3E0; color: #EF6C00; font-family: monospace; }
-        .tag-blue { background: #E3F2FD; color: #1976D2; } /* 航班/迪士尼標籤 */
+        .tag-blue { background: #E3F2FD; color: #1976D2; }
 
-        .nav-btn {
-            display: inline-flex; align-items: center; background: #4A90E2; color: white;
-            padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; text-decoration: none; margin-top: 10px;
-        }
-
+        .nav-btn { display: inline-flex; align-items: center; background: #4A90E2; color: white; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; text-decoration: none; margin-top: 10px; }
         .card-actions { display: flex; gap: 15px; }
         .card-actions i { font-size: 0.9rem; padding: 5px; }
 
-        /* Tab Bar */
-        .tab-bar {
-            position: fixed; bottom: 20px; left: 20px; right: 20px;
-            background: white; border-radius: 50px; display: flex; justify-content: space-around;
-            padding: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); z-index: 200;
-        }
+        /* Budget Tabs */
+        .budget-tabs { display: flex; justify-content: space-between; background: #eee; padding: 5px; border-radius: 15px; margin-bottom: 15px; }
+        .budget-tab { flex: 1; text-align: center; padding: 8px 5px; font-size: 0.85rem; border-radius: 12px; cursor: pointer; color: #888; transition: all 0.3s; }
+        .budget-tab.active { background: white; color: var(--nav-active); font-weight: bold; shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .expense-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+        .expense-price { font-weight: bold; color: #E65100; }
+        .total-display { text-align: center; background: var(--accent-yellow); padding: 15px; border-radius: 15px; margin-bottom: 20px; }
+
+        /* Tools & Tab Bar */
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .tool-card { background: var(--card-bg); padding: 20px; border-radius: 20px; text-align: center; box-shadow: var(--shadow); cursor: pointer; }
+        .tool-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
+
+        .tab-bar { position: fixed; bottom: 20px; left: 20px; right: 20px; background: white; border-radius: 50px; display: flex; justify-content: space-around; padding: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); z-index: 200; }
         .tab-item { color: var(--text-light); font-size: 1.2rem; padding: 10px; }
         .tab-item.active { color: var(--nav-active); transform: translateY(-2px); }
 
-        /* Modal */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 999; justify-content: center; align-items: center;
-        }
+        /* Modals */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; justify-content: center; align-items: center; }
         .modal-overlay.open { display: flex; }
-        .modal-card {
-            background: white; width: 85%; max-width: 400px; padding: 25px;
-            border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-height: 80vh; overflow-y: auto;
-        }
+        .modal-card { background: white; width: 85%; max-width: 400px; padding: 25px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 80vh; overflow-y: auto; position: relative; }
+        .btn-close { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; color: #999; cursor: pointer; }
         .form-group { margin-bottom: 15px; }
         .form-label { display: block; margin-bottom: 5px; font-size: 0.9rem; font-weight: bold; }
-        .form-input, .form-select {
-            width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 10px;
-            font-size: 1rem; background: #FAFAFA;
-        }
-        .btn-submit {
-            width: 100%; padding: 12px; background: var(--nav-active); color: white;
-            border: none; border-radius: 12px; font-size: 1rem; font-weight: bold; cursor: pointer;
-        }
-        .btn-close {
-            position: absolute; top: 15px; right: 15px; font-size: 1.5rem; color: #999; cursor: pointer;
-        }
+        .form-input, .form-select { width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 10px; font-size: 1rem; background: #FAFAFA; }
+        .btn-submit { width: 100%; padding: 12px; background: var(--nav-active); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; }
 
         /* Sections */
         .section { display: none; }
         .section.active { display: block; }
-        
-        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .tool-card {
-            background: var(--card-bg); padding: 20px; border-radius: 20px;
-            text-align: center; box-shadow: var(--shadow); cursor: pointer;
-        }
-        .tool-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
-        
-        /* Info Detail Styles */
+        .day-scroll { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; margin-bottom: 10px; }
+        .day-chip { background: var(--card-bg); padding: 8px 16px; border-radius: 16px; white-space: nowrap; border: 1px solid #eee; transition: all 0.3s; }
+        .day-chip.active { background: var(--text-main); color: white; border-color: var(--text-main); }
         .info-detail { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
         .info-detail:last-child { border: none; }
         .info-title { font-weight: bold; font-size: 1.1rem; color: #4A90E2; margin-bottom: 5px; }
         .info-sub { font-size: 0.9rem; color: var(--text-light); margin-bottom: 3px; }
         .info-content { font-size: 1.1rem; font-weight: bold; margin: 5px 0; }
         .info-address { font-size: 0.9rem; color: #555; background: #f9f9f9; padding: 8px; border-radius: 8px; margin-top: 5px; }
-
-        /* Detail View */
         #detail-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; color: var(--text-main); }
-        #detail-time-tag { 
-            display: inline-block; background: var(--nav-active); color: white; 
-            padding: 4px 10px; border-radius: 10px; font-weight: bold; margin-bottom: 15px;
-        }
+        #detail-time-tag { display: inline-block; background: var(--nav-active); color: white; padding: 4px 10px; border-radius: 10px; font-weight: bold; margin-bottom: 15px; }
         #detail-desc { font-size: 1rem; line-height: 1.8; color: #555; white-space: pre-wrap; }
     </style>
 </head>
@@ -230,11 +183,11 @@
                 <div class="tool-card" onclick="showHotelInfo()">
                     <span class="tool-icon">🏨</span><strong>住宿資訊</strong>
                 </div>
-                <div class="tool-card">
-                    <span class="tool-icon">🆘</span><strong>緊急聯絡</strong>
+                <div class="tool-card" onclick="showBudgetInfo()">
+                    <span class="tool-icon">💰</span><strong>記帳/預算</strong>
                 </div>
                 <div class="tool-card">
-                    <span class="tool-icon">💰</span><strong>記帳/預算</strong>
+                    <span class="tool-icon">🆘</span><strong>緊急聯絡</strong>
                 </div>
             </div>
             
@@ -257,103 +210,75 @@
     </div>
 
     <div class="modal-overlay" id="formModal">
-        <div class="modal-card" style="position:relative;">
+        <div class="modal-card">
             <div class="btn-close" onclick="closeModal('formModal')">&times;</div>
             <h3 style="margin-top:0;" id="form-title">✨ 新增行程</h3>
             <input type="hidden" id="input-id">
-            <div class="form-group">
-                <label class="form-label">第幾天</label>
-                <select id="input-day" class="form-select">
-                    <option value="1">Day 1: 抵達南京</option>
-                    <option value="2">Day 2: 歷史巡禮</option>
-                    <option value="3">Day 3: 文藝散策</option>
-                    <option value="4">Day 4: 移動日</option>
-                    <option value="5">Day 5: 繁花之旅</option>
-                    <option value="6">Day 6: 回程</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">時間</label>
-                <input type="time" id="input-time" class="form-input" value="12:00">
-            </div>
-            <div class="form-group">
-                <label class="form-label">類型</label>
-                <select id="input-type" class="form-select">
-                    <option value="spot">📍 景點</option>
-                    <option value="food">🍜 美食</option>
-                    <option value="transport">🚗 交通</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">標題</label>
-                <input type="text" id="input-title" class="form-input" placeholder="例如：南京大牌檔">
-            </div>
-            <div class="form-group">
-                <label class="form-label">描述 / 攻略</label>
-                <textarea id="input-desc" class="form-input" rows="3" placeholder="必點烤鴨包..."></textarea>
-            </div>
-            <div class="form-group">
-                <label class="form-label">導航地點</label>
-                <input type="text" id="input-location" class="form-input" placeholder="用於高德地圖搜尋">
-            </div>
+            <div class="form-group"><label class="form-label">第幾天</label><select id="input-day" class="form-select"><option value="1">Day 1</option><option value="2">Day 2</option><option value="3">Day 3</option><option value="4">Day 4</option><option value="5">Day 5</option><option value="6">Day 6</option></select></div>
+            <div class="form-group"><label class="form-label">時間</label><input type="time" id="input-time" class="form-input" value="12:00"></div>
+            <div class="form-group"><label class="form-label">類型</label><select id="input-type" class="form-select"><option value="spot">📍 景點</option><option value="food">🍜 美食</option><option value="transport">🚗 交通</option></select></div>
+            <div class="form-group"><label class="form-label">標題</label><input type="text" id="input-title" class="form-input" placeholder="例如：南京大牌檔"></div>
+            <div class="form-group"><label class="form-label">描述</label><textarea id="input-desc" class="form-input" rows="3"></textarea></div>
+            <div class="form-group"><label class="form-label">地點</label><input type="text" id="input-location" class="form-input" placeholder="導航地點"></div>
             <button class="btn-submit" id="btn-save" onclick="saveData()">確認新增</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="detailModal">
-        <div class="modal-card" style="position:relative;">
+        <div class="modal-card">
             <div class="btn-close" onclick="closeModal('detailModal')">&times;</div>
-            <div id="detail-time-tag">12:00</div>
-            <div id="detail-title">標題</div>
-            <div style="margin-bottom: 20px; border-bottom:1px solid #eee;"></div>
-            <div id="detail-desc">描述內容...</div>
-            <div style="margin-top:20px;">
-                <a id="detail-nav-btn" href="#" target="_blank" class="btn-submit" style="display:block; text-align:center; text-decoration:none;">
-                    <i class="fas fa-location-arrow"></i> 開啟導航
-                </a>
-            </div>
+            <div id="detail-time-tag"></div><div id="detail-title"></div>
+            <div style="border-bottom:1px solid #eee; margin-bottom:20px;"></div>
+            <div id="detail-desc"></div>
+            <a id="detail-nav-btn" href="#" target="_blank" class="btn-submit" style="display:block; text-align:center; text-decoration:none; margin-top:20px;">導航</a>
         </div>
     </div>
 
     <div class="modal-overlay" id="flightModal">
-        <div class="modal-card" style="position:relative;">
+        <div class="modal-card">
             <div class="btn-close" onclick="closeModal('flightModal')">&times;</div>
-            <h3 style="margin-top:0; margin-bottom: 20px;">✈️ 航班資訊</h3>
-            <div class="info-detail">
-                <div class="info-title">去程：澳門 ➔ 南京</div>
-                <div class="info-sub">12月18日 (週一)</div>
-                <div class="info-content">13:00 - 15:25</div>
-                <div style="font-size:0.9rem;">東方航空 MU9798</div>
-            </div>
-            <div class="info-detail">
-                <div class="info-title">回程：上海浦東 ➔ 澳門</div>
-                <div class="info-sub">12月23日 (週六)</div>
-                <div class="info-content">17:25 - 20:20</div>
-                <div style="font-size:0.9rem;">東方航空 MU9991</div>
-            </div>
-            <div style="background:#FFF3E0; padding:10px; border-radius:10px; font-size:0.9rem; color:#E65100; margin-top:10px;">
-                <i class="fas fa-exclamation-circle"></i> 記得提早 2 小時抵達機場 Check-in！
-            </div>
+            <h3>✈️ 航班資訊</h3>
+            <div class="info-detail"><div class="info-title">去程：澳門 ➔ 南京</div><div class="info-sub">12月18日</div><div class="info-content">13:00 - 15:25</div><div>MU9798</div></div>
+            <div class="info-detail"><div class="info-title">回程：上海浦東 ➔ 澳門</div><div class="info-sub">12月23日</div><div class="info-content">17:25 - 20:20</div><div>MU9991</div></div>
         </div>
     </div>
 
     <div class="modal-overlay" id="hotelModal">
-        <div class="modal-card" style="position:relative;">
+        <div class="modal-card">
             <div class="btn-close" onclick="closeModal('hotelModal')">&times;</div>
-            <h3 style="margin-top:0; margin-bottom: 20px;">🏨 住宿資訊</h3>
-            <div class="info-detail">
-                <div class="info-title">南京：里白酒店</div>
-                <div class="info-sub">玄武湖新模范馬路地鐵站店</div>
-                <div class="info-content">12月18日 - 12月20日 (2晚)</div>
-                <div style="font-size:0.9rem; margin-bottom:5px;">影音雙床房 x2</div>
-                <div class="info-address"><i class="fas fa-map-marker-alt"></i> 鼓樓區中央路323號利奧大廈F4層</div>
+            <h3>🏨 住宿資訊</h3>
+            <div class="info-detail"><div class="info-title">南京：里白酒店</div><div class="info-sub">12/18 - 12/20</div><div class="info-address">鼓樓區中央路323號利奧大廈F4層</div></div>
+            <div class="info-detail"><div class="info-title">上海：建國璞隱酒店</div><div class="info-sub">12/20 - 12/23</div><div class="info-address">上海浦東新區東方路1277號</div></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="budgetModal">
+        <div class="modal-card">
+            <div class="btn-close" onclick="closeModal('budgetModal')">&times;</div>
+            <h3 style="margin-top:0;">💰 記帳本</h3>
+            
+            <div class="budget-tabs">
+                <div class="budget-tab active" onclick="switchUser('William')">William</div>
+                <div class="budget-tab" onclick="switchUser('Stella')">Stella</div>
+                <div class="budget-tab" onclick="switchUser('Angie')">Angie</div>
+                <div class="budget-tab" onclick="switchUser('January')">January</div>
             </div>
-            <div class="info-detail">
-                <div class="info-title">上海：建國璞隱酒店</div>
-                <div class="info-sub">陸家嘴軟件園東方路店</div>
-                <div class="info-content">12月20日 - 12月23日 (3晚)</div>
-                <div style="font-size:0.9rem; margin-bottom:5px;">Check-in: 14:00後</div>
-                <div class="info-address"><i class="fas fa-map-marker-alt"></i> 上海浦東新區東方路1277號</div>
+
+            <div class="total-display">
+                <div style="font-size:0.9rem; color:#888;">目前總花費</div>
+                <div style="font-size:2rem; font-weight:bold; color:#4A4A4A;" id="user-total">$0</div>
+            </div>
+
+            <div style="max-height: 200px; overflow-y: auto; margin-bottom: 20px;" id="expense-list">
+                </div>
+
+            <div style="border-top: 1px solid #eee; padding-top: 15px;">
+                <h4 style="margin:0 0 10px 0;">新增一筆</h4>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <input type="text" id="expense-item" class="form-input" placeholder="項目 (如: 奶茶)" style="flex:2;">
+                    <input type="number" id="expense-amount" class="form-input" placeholder="$" style="flex:1;">
+                </div>
+                <button class="btn-submit" onclick="addExpense()">記帳</button>
             </div>
         </div>
     </div>
@@ -375,275 +300,169 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 1. 城市與行程對應
-        const dayLabels = {
-            1: "Day 1: 抵達南京", 2: "Day 2: 歷史巡禮", 3: "Day 3: 文藝散策",
-            4: "Day 4: 移動日", 5: "Day 5: 迪士尼樂園", 6: "Day 6: 回程"
-        };
+        const dayLabels = { 1: "Day 1", 2: "Day 2", 3: "Day 3", 4: "Day 4", 5: "Day 5", 6: "Day 6" };
         const cityMap = { 1:"南京", 2:"南京", 3:"南京", 4:"上海", 5:"上海", 6:"上海" };
-        
-        // 2. 城市座標
-        const cityCoords = {
-            '南京': { lat: 32.0617, lon: 118.7632 },
-            '上海': { lat: 31.2304, lon: 121.4737 },
-            '澳門': { lat: 22.1944, lon: 113.5488 }
-        };
+        const cityCoords = { '南京': { lat: 32.0617, lon: 118.7632 }, '上海': { lat: 31.2304, lon: 121.4737 }, '澳門': { lat: 22.1944, lon: 113.5488 } };
 
         let currentDay = 1;
-        let allItineraries = []; 
+        let allItineraries = [];
+        
+        // 記帳相關變數
+        let currentUser = 'William';
+        let allExpenses = [];
 
-        // 3. 固定行程清單 (包含航班 + 迪士尼)
         const fixedItems = [
-            {
-                id: "flight_go", day: 1, time: "13:00", type: "fixed-item",
-                title: "✈️ 飛往南京 (MU9798)",
-                desc: "澳門(MFM) ➔ 南京(NKG) | 13:00 起飛 - 15:25 抵達",
-                location: "澳門國際機場", isFixed: true, tag: "航班"
-            },
-            {
-                id: "disney_land", day: 5, time: "08:30", type: "fixed-item",
-                title: "🏰 上海迪士尼樂園 (全日)",
-                desc: "瘋狂動物城、花車巡遊、煙火秀\n⏰ 開放時間：08:30 - 21:30\n⚠️ 必須攜帶本人有效身份證原件入園！無需換票，憑證件直接刷卡入園。",
-                location: "上海迪士尼度假區", isFixed: true, tag: "主題樂園"
-            },
-            {
-                id: "flight_back", day: 6, time: "17:25", type: "fixed-item",
-                title: "✈️ 飛往澳門 (MU9991)",
-                desc: "上海浦東(PVG) ➔ 澳門(MFM) | 17:25 起飛 - 20:20 抵達",
-                location: "上海浦東國際機場T1", isFixed: true, tag: "航班"
-            }
+            { id: "flight_go", day: 1, time: "13:00", type: "fixed-item", title: "✈️ 飛往南京 (MU9798)", desc: "澳門(MFM) ➔ 南京(NKG)", location: "澳門國際機場", isFixed: true, tag: "航班" },
+            { id: "disney_land", day: 5, time: "08:30", type: "fixed-item", title: "🏰 上海迪士尼樂園 (全日)", desc: "記得帶身份證！\n08:30 - 21:30", location: "上海迪士尼度假區", isFixed: true, tag: "主題樂園" },
+            { id: "flight_back", day: 6, time: "17:25", type: "fixed-item", title: "✈️ 飛往澳門 (MU9991)", desc: "上海浦東(PVG) ➔ 澳門(MFM)", location: "上海浦東國際機場T1", isFixed: true, tag: "航班" }
         ];
 
         window.onload = function() {
             renderDaySelector();
             listenRealtimeData();
+            listenExpenseData(); // 監聽記帳資料
             updateWeather("南京");
         };
 
-        // === 🌤️ 實時天氣 ===
-        function getWeatherDesc(code) {
-            if (code === 0) return "晴朗 ☀️";
-            if (code >= 1 && code <= 3) return "多雲 ☁️";
-            if (code >= 45 && code <= 48) return "有霧 🌫️";
-            if (code >= 51 && code <= 67) return "有雨 🌧️";
-            if (code >= 71 && code <= 77) return "有雪 ❄️";
-            if (code >= 80 && code <= 82) return "陣雨 🌦️";
-            if (code >= 95) return "雷雨 ⛈️";
-            return "舒適";
+        // === 記帳功能 ===
+        function listenExpenseData() {
+            db.collection("expenses").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+                allExpenses = [];
+                snapshot.forEach((doc) => {
+                    allExpenses.push({ id: doc.id, ...doc.data() });
+                });
+                renderBudget(); // 資料更新時重繪介面
+            });
         }
 
+        function switchUser(user) {
+            currentUser = user;
+            document.querySelectorAll('.budget-tab').forEach(el => {
+                el.classList.remove('active');
+                if(el.textContent === user) el.classList.add('active');
+            });
+            renderBudget();
+        }
+
+        function renderBudget() {
+            const list = document.getElementById('expense-list');
+            list.innerHTML = '';
+            
+            // 過濾出當前使用者的花費
+            const userExpenses = allExpenses.filter(e => e.user === currentUser);
+            
+            // 計算總額
+            let total = 0;
+            userExpenses.forEach(e => {
+                total += parseFloat(e.amount);
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'expense-item';
+                itemDiv.innerHTML = `
+                    <span>${e.item}</span>
+                    <span class="expense-price">$${e.amount}</span>
+                `;
+                list.appendChild(itemDiv);
+            });
+            document.getElementById('user-total').textContent = `$${total}`;
+        }
+
+        function addExpense() {
+            const item = document.getElementById('expense-item').value;
+            const amount = document.getElementById('expense-amount').value;
+            if(!item || !amount) return alert("請輸入項目和金額");
+
+            db.collection("expenses").add({
+                user: currentUser,
+                item: item,
+                amount: Number(amount),
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('expense-item').value = '';
+                document.getElementById('expense-amount').value = '';
+            });
+        }
+
+        function showBudgetInfo() { openModal('budgetModal'); renderBudget(); }
+
+        // === 其他核心功能 ===
         function updateWeather(city) {
             const coords = cityCoords[city];
             if (!coords) return;
-            document.getElementById('weather-temp').textContent = '--°C';
-            document.getElementById('weather-desc').textContent = '更新中...';
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current_weather=true&timezone=auto`;
-            fetch(url).then(response => response.json()).then(data => {
-                const temp = Math.round(data.current_weather.temperature);
-                const code = data.current_weather.weathercode;
-                document.getElementById('weather-temp').textContent = `${temp}°C`;
-                document.getElementById('weather-desc').textContent = `${getWeatherDesc(code)} • ${city}`;
-                const bg = code <= 3 ? 'linear-gradient(135deg, #e0f2ff 0%, #ffffff 100%)' :
-                           code >= 51 ? 'linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%)' :
-                           'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)';
-                document.querySelector('.weather-card').style.background = bg;
-            }).catch(e => {
-                document.getElementById('weather-temp').textContent = 'N/A';
-                document.getElementById('weather-desc').textContent = '天氣服務暫停';
-            });
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current_weather=true&timezone=auto`)
+                .then(r => r.json()).then(d => {
+                    document.getElementById('weather-temp').textContent = `${Math.round(d.current_weather.temperature)}°C`;
+                    document.getElementById('weather-desc').textContent = `${city}`;
+                });
         }
-        
         function cycleCity() {
-            const current = document.getElementById('current-city').textContent;
-            let next = "南京";
-            if(current === "南京") next = "上海";
-            else if(current === "上海") next = "澳門";
-            else if(current === "澳門") next = "南京";
+            const curr = document.getElementById('current-city').textContent;
+            let next = curr === "南京" ? "上海" : (curr === "上海" ? "澳門" : "南京");
             document.getElementById('current-city').textContent = next;
             updateWeather(next);
         }
-
-        // === 資料庫監聽 ===
         function listenRealtimeData() {
-            db.collection("trips").orderBy("time").onSnapshot((snapshot) => {
+            db.collection("trips").orderBy("time").onSnapshot((s) => {
                 allItineraries = [];
-                snapshot.forEach((doc) => {
-                    allItineraries.push({ id: doc.id, ...doc.data() });
-                });
+                s.forEach((d) => allItineraries.push({ id: d.id, ...d.data() }));
                 renderItinerary(currentDay);
-            }, (error) => {
-                if(error.code === 'permission-denied') alert("⚠️ 權限錯誤：請確認資料庫已建立！");
             });
         }
-
-        // === 新增/更新資料 ===
         function saveData() {
             const id = document.getElementById('input-id').value;
-            const day = parseInt(document.getElementById('input-day').value);
-            const time = document.getElementById('input-time').value;
-            const type = document.getElementById('input-type').value;
-            const title = document.getElementById('input-title').value;
-            const desc = document.getElementById('input-desc').value;
-            const location = document.getElementById('input-location').value;
-
-            if(!title) return alert("請輸入標題！");
-            const btn = document.getElementById('btn-save');
-            btn.textContent = "處理中...";
-            btn.disabled = true;
-            const data = { day, time, type, title, desc, location: location || title };
-
-            let promise;
-            if (id) promise = db.collection("trips").doc(id).update(data);
+            const data = {
+                day: parseInt(document.getElementById('input-day').value),
+                time: document.getElementById('input-time').value,
+                type: document.getElementById('input-type').value,
+                title: document.getElementById('input-title').value,
+                desc: document.getElementById('input-desc').value,
+                location: document.getElementById('input-location').value || document.getElementById('input-title').value
+            };
+            if(!data.title) return alert("請輸入標題");
+            if(id) db.collection("trips").doc(id).update(data).then(() => closeModal('formModal'));
             else {
                 data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-                promise = db.collection("trips").add(data);
+                db.collection("trips").add(data).then(() => closeModal('formModal'));
             }
-            promise.then(() => {
-                closeModal('formModal');
-                btn.disabled = false;
-            }).catch((error) => {
-                alert("儲存失敗：" + error.message);
-                btn.disabled = false;
-            });
         }
-
-        // === 渲染行程 ===
         function renderItinerary(dayId) {
             const list = document.getElementById('itinerary-list');
             list.innerHTML = '';
-
-            let dayItems = allItineraries.filter(item => parseInt(item.day) === dayId);
-            // 加入固定行程 (航班、迪士尼)
-            const daysFixedItems = fixedItems.filter(f => f.day === dayId);
-            dayItems = [...dayItems, ...daysFixedItems];
-            dayItems.sort((a, b) => a.time.localeCompare(b.time));
-
-            if (dayItems.length === 0) {
-                list.innerHTML = `
-                    <div style="text-align:center; padding:40px; color:#aaa;">
-                        <i class="fas fa-ghost fa-2x" style="opacity:0.3; margin-bottom:10px;"></i>
-                        <p>這天還是空的捏<br>按 + 號新增行程吧！</p>
+            let items = [...allItineraries.filter(i => parseInt(i.day) === dayId), ...fixedItems.filter(f => f.day === dayId)];
+            items.sort((a, b) => a.time.localeCompare(b.time));
+            if(items.length===0) list.innerHTML = `<div style="text-align:center;padding:30px;color:#ccc;">暫無行程</div>`;
+            items.forEach(item => {
+                const isFixed = item.isFixed;
+                const btns = isFixed ? `<i class="fas fa-lock" style="color:#eee;"></i>` : 
+                    `<div class="card-actions"><i class="fas fa-pen" onclick="editItem('${item.id}');event.stopPropagation()"></i><i class="fas fa-trash-alt" onclick="delItem('${item.id}');event.stopPropagation()" style="color:#ffb7b7;"></i></div>`;
+                const tagHtml = isFixed ? `<span class="tag tag-blue">${item.tag}</span>` : '';
+                list.innerHTML += `
+                    <div class="timeline-item">
+                        <div class="timeline-dot ${isFixed?'fixed-item':''}"></div>
+                        <div class="card ${item.type} ${isFixed?'fixed-item':''}" onclick="showDetail('${encodeURIComponent(JSON.stringify(item))}')">
+                            <div class="card-header"><span class="time">${item.time}</span>${btns}</div>
+                            <div class="title">${item.title}</div><div class="desc">${item.desc}</div><div class="tags">${tagHtml}</div>
+                        </div>
                     </div>`;
-                return;
-            }
-
-            dayItems.forEach(item => {
-                const timelineItem = document.createElement('div');
-                timelineItem.className = 'timeline-item';
-
-                let tagHtml = '';
-                // 標籤邏輯
-                if(item.isFixed) {
-                    const tagName = item.tag || "固定行程";
-                    tagHtml += `<span class="tag tag-blue">${tagName}</span>`;
-                } else {
-                    if(item.desc && item.desc.includes("必吃")) tagHtml += `<span class="tag tag-must-eat">必吃</span>`;
-                    if(item.desc && item.desc.includes("預約")) tagHtml += `<span class="tag tag-code">需預約</span>`;
-                }
-
-                let actionBtns = '';
-                if (!item.isFixed) {
-                    actionBtns = `
-                        <div class="card-actions">
-                            <i class="fas fa-pen" style="color:#aaa; cursor:pointer;" onclick="openEditModal('${item.id}'); event.stopPropagation();"></i>
-                            <i class="fas fa-trash-alt" style="color:#ffb7b7; cursor:pointer;" onclick="deleteItem('${item.id}'); event.stopPropagation();"></i>
-                        </div>
-                    `;
-                } else {
-                    actionBtns = `<i class="fas fa-lock" style="color:#eee;" title="固定行程無法修改"></i>`;
-                }
-
-                const itemStr = encodeURIComponent(JSON.stringify(item));
-                timelineItem.innerHTML = `
-                    <div class="timeline-dot ${item.isFixed ? 'fixed-item' : ''}"></div>
-                    <div class="card ${item.type} ${item.isFixed ? 'fixed-item' : ''}" onclick="viewDetail('${itemStr}')">
-                        <div class="card-header">
-                            <span class="time">${item.time}</span>
-                            ${actionBtns}
-                        </div>
-                        <div class="title">${item.title}</div>
-                        <div class="desc">${item.desc}</div>
-                        <div class="tags">${tagHtml}</div>
-                    </div>
-                `;
-                list.appendChild(timelineItem);
             });
         }
-
-        // === 輔助功能 ===
-        function viewDetail(itemStr) {
-            const item = JSON.parse(decodeURIComponent(itemStr));
-            document.getElementById('detail-time-tag').textContent = item.time;
-            document.getElementById('detail-title').textContent = item.title;
-            document.getElementById('detail-desc').innerText = item.desc || "沒有描述";
-            const amapUrl = `https://uri.amap.com/navigation?poiname=${encodeURIComponent(item.location)}`;
-            document.getElementById('detail-nav-btn').href = amapUrl;
-            openModal('detailModal');
-        }
-
-        function openAddModal() {
-            document.getElementById('form-title').textContent = "✨ 新增行程";
-            document.getElementById('btn-save').textContent = "確認新增";
-            document.getElementById('input-id').value = "";
-            document.getElementById('input-title').value = '';
-            document.getElementById('input-desc').value = '';
-            document.getElementById('input-location').value = '';
-            document.getElementById('input-time').value = '12:00';
-            openModal('formModal');
-        }
-
-        function openEditModal(id) {
-            const item = allItineraries.find(i => i.id === id);
-            if (!item) return;
-            document.getElementById('form-title').textContent = "✏️ 編輯行程";
-            document.getElementById('btn-save').textContent = "確認修改";
-            document.getElementById('input-id').value = item.id;
-            document.getElementById('input-day').value = item.day;
-            document.getElementById('input-time').value = item.time;
-            document.getElementById('input-type').value = item.type;
-            document.getElementById('input-title').value = item.title;
-            document.getElementById('input-desc').value = item.desc;
-            document.getElementById('input-location').value = item.location;
-            openModal('formModal');
-        }
-
-        function deleteItem(docId) {
-            if(confirm("確定要刪除這個行程嗎？")) {
-                db.collection("trips").doc(docId).delete().catch(error => alert("刪除失敗"));
-            }
-        }
-
         function renderDaySelector() {
-            const container = document.getElementById('day-selector');
-            container.innerHTML = '';
-            for(let i=1; i<=6; i++) {
-                const chip = document.createElement('div');
-                chip.className = `day-chip ${i === currentDay ? 'active' : ''}`;
-                chip.textContent = dayLabels[i].split(':')[0]; 
-                chip.onclick = () => {
-                    currentDay = i;
-                    const city = cityMap[i];
-                    document.getElementById('current-city').textContent = city;
-                    updateWeather(city);
-                    renderDaySelector();
-                    renderItinerary(i);
-                };
-                container.appendChild(chip);
+            const c = document.getElementById('day-selector'); c.innerHTML='';
+            for(let i=1;i<=6;i++){
+                const d = document.createElement('div'); d.className=`day-chip ${i===currentDay?'active':''}`;
+                d.textContent=`Day ${i}`; d.onclick=()=>{currentDay=i; document.getElementById('current-city').textContent=cityMap[i]; updateWeather(cityMap[i]); renderDaySelector(); renderItinerary(i);}
+                c.appendChild(d);
             }
         }
+        function showDetail(str) { const i=JSON.parse(decodeURIComponent(str)); document.getElementById('detail-time-tag').textContent=i.time; document.getElementById('detail-title').textContent=i.title; document.getElementById('detail-desc').innerText=i.desc||''; document.getElementById('detail-nav-btn').href=`https://uri.amap.com/navigation?poiname=${encodeURIComponent(i.location)}`; openModal('detailModal'); }
+        function editItem(id) { const i=allItineraries.find(x=>x.id===id); if(!i)return; document.getElementById('input-id').value=i.id; document.getElementById('input-day').value=i.day; document.getElementById('input-title').value=i.title; document.getElementById('input-time').value=i.time; document.getElementById('input-desc').value=i.desc; document.getElementById('input-location').value=i.location; openModal('formModal'); }
+        function delItem(id) { if(confirm("刪除？")) db.collection("trips").doc(id).delete(); }
         
-        function openModal(id) { document.getElementById(id).classList.add('open'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-        function showFlightInfo() { openModal('flightModal'); }
-        function showHotelInfo() { openModal('hotelModal'); }
-
-        function switchTab(t) {
-            document.querySelectorAll('.section').forEach(e => e.classList.remove('active'));
-            document.getElementById('tab-'+t).classList.add('active');
-            document.querySelectorAll('.tab-item').forEach(e => e.classList.remove('active'));
-            if(t==='itinerary') document.querySelectorAll('.tab-item')[0].classList.add('active');
-            if(t==='tools') document.querySelectorAll('.tab-item')[1].classList.add('active');
-        }
+        function openModal(id){document.getElementById(id).classList.add('open');}
+        function closeModal(id){document.getElementById(id).classList.remove('open');}
+        function openAddModal(){document.getElementById('input-id').value='';document.getElementById('input-title').value='';openModal('formModal');}
+        function showFlightInfo(){openModal('flightModal');}
+        function showHotelInfo(){openModal('hotelModal');}
+        function switchTab(t){document.querySelectorAll('.section').forEach(e=>e.classList.remove('active'));document.getElementById('tab-'+t).classList.add('active');if(t==='itinerary')document.querySelectorAll('.tab-item')[0].classList.add('active');if(t==='tools')document.querySelectorAll('.tab-item')[1].classList.add('active');}
     </script>
 </body>
 </html>
